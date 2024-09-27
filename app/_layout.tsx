@@ -1,37 +1,46 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { View, Text } from "react-native";import React, { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import { getItem } from "@/constant/asyncStorage";
+import { Tabs } from "expo-router";
+import OnBoarding from "./OnBoarding";
+import Page from "./(tabs)/(home)/index";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function _layout() {
+  const [onBoarded, setOnBoarded] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    checkUserOnboarding();
+  }, []);
+  const checkUserOnboarding = async () => {
+    const userOnboarding = await getItem("onBoarded");
+    
+    if (userOnboarding == null) {
+      setOnBoarded(false);
+    } else {
+      setOnBoarded(true);
     }
-  }, [loaded]);
+  };
 
-  if (!loaded) {
-    return null;
+  if (onBoarded) {
+    return (
+      <Stack initialRouteName="OnBoarding">
+        <Stack.Screen
+          name="OnBoarding"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="(tabs)"options={{ headerShown: false }} />
+      </Stack>
+    );
+  } else {
+    return (
+      <Stack initialRouteName="(tabs)">
+        <Stack.Screen
+          name="OnBoarding"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="(tabs)"options={{ headerShown: false }} />
+      </Stack>
+    );
   }
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
-  );
 }
