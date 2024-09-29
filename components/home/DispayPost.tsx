@@ -4,21 +4,10 @@ import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { formatTimeDifference } from "@/constant/asyncStorage";
 
-export default function PostDispay({ item }: { item: any }) {
-    const formatTimeDifference = (date: Date) => {
-        const now = new Date();
-        const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-        if (diffInSeconds >= 86400) {
-          return `${Math.floor(diffInSeconds / 86400)}d`;
-        } else if (diffInSeconds >= 3600) {
-          return `${Math.floor(diffInSeconds / 3600)}h`;
-        } else if (diffInSeconds >= 60) {
-          return `${Math.floor(diffInSeconds / 60)}m`;
-        } else {
-          return `${diffInSeconds}s`;
-        }
-      };
+export default function DispayPost({ item }: { item: any }) {
+    
   return (
     <View className="px-3 border-b border-gray-200 my-3 pb-3 flex-row gap-2">
       <View className="items-center ">

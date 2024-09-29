@@ -40,7 +40,7 @@ export default function OnBoarding() {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const onLoginHandler = () =>{
-    setItem("onBoarded", "true");
+    setItem("onBoarded", 1);
     router.push('/');
   }
   return (
